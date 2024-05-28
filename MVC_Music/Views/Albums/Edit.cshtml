@@ -1,0 +1,132 @@
+﻿@model MVC_Music.Models.Album
+
+@{
+    ViewData["Title"] = "Edit Album";
+}
+
+<h2>Edit Album</h2>
+
+<hr />
+<partial name="_SongModal" />
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="ID" />
+    <input type="hidden" asp-for="RowVersion" />
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="YearProduced" class="control-label"></label>
+                <input asp-for="YearProduced" class="form-control" />
+                <span asp-validation-for="YearProduced" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GenreID" class="control-label"></label>
+                <select asp-for="GenreID" class="form-control" asp-items="ViewBag.GenreID"></select>
+                <span asp-validation-for="GenreID" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="form-group" id="ListSongs">
+                <label class="control-label"><strong>Songs</strong> &nbsp; &nbsp;</label>
+                <button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-bs-toggle="modal" data-bs-target="#theSongModal" title="Add Song" type="button">&#x271A; Add Song</button>
+                <div class="col-md-offset-1" id="SongList">
+                    <table>
+                        @{
+                            foreach (var item in Model.Songs.OrderBy(s=>s.Title))
+                            {
+                                    @:<tr><td>
+                                        @item.Summary 
+                                    @:</td><td>
+                                        @:&nbsp; &nbsp;
+                                        <button class="btn btn-sm modal-link" tag="@item.ID" name="EditForm" data-bs-toggle="modal" data-bs-target="#theSongModal" title="Edit @item.Title" type="button">&#x270D;</button>
+                                        <button class="btn btn-sm modal-link" tag="@item.ID" name="DeleteForm" data-bs-toggle="modal" data-bs-target="#theSongModal" title="Delete @item.Title" type="button">&#x274C;</button>
+                                    @:</td></tr>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" @ViewData["NoSubmit"] value="Save" class="btn btn-primary" />
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to Album List</a>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script type="text/javascript">
+            function refreshModal(actionForm, songID) {
+              switch (actionForm) {
+                case 'CreateForm': $('#formSongBody').load('/AlbumSongs/CreateSong/?GenreID=' + @Model.GenreID + '&AlbumID=' + @Model.ID );
+                    break;
+                  case 'EditForm': $('#formSongBody').load('/AlbumSongs/EditSong/' + songID);
+                    break;
+                  case 'DeleteForm': $('#formSongBody').load('/AlbumSongs/DeleteSong/' + songID)
+                    break;
+                default: break;
+              };
+            return;
+            };
+            $(document).on("click", ".modal-link", function () {
+                var actionForm = $(this).attr("name");
+                var songID = $(this).attr("tag");
+                refreshModal(actionForm, songID);
+            });
+            $(document).on("click", "#submitSongForm", function (event) {
+                event.preventDefault();
+                var form = $('#theSongForm');
+                if (form.valid()) {
+                    $.ajax({
+                        type: "POST",
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        success: function () {
+                            $('#theSongModal').modal('hide');
+                        },
+                        error: function (xhr) { 
+                        var errorMessages = [];
+                        switch (xhr.status) {
+                            case 401:
+                                errorMessages.push("You must be logged in first.");
+                                break;
+                            case 403:
+                                errorMessages.push("You are not authorized for this action.");
+                                break;
+                            default:
+                                errorMessages = xhr.responseText.split("|").slice(0, -1);
+                        }
+                        if (!errorMessages.some((str) => str !== "")) {
+                            errorMessages.push("Error: Unable to complete operation");
+                        }
+                        var ul = document.getElementById("ErrorList");
+                        for (var i = 0; i < errorMessages.length; i++) {
+                            var errorMessage = errorMessages[i];
+                            var li = document.createElement("li");
+                            li.innerHTML = errorMessage;
+                            ul.appendChild(li);
+                        }
+                    }
+                    });
+                }
+                return false;
+            });
+            $('#theSongModal').on('hide.bs.modal', function () {
+                $('#SongList').load('/Albums/SongList/@Model.ID');
+            });
+        </script>
+}

@@ -1,0 +1,26 @@
+﻿@{
+    MVC_Music.Models.SongDetail songDetail = (MVC_Music.Models.SongDetail)ViewBag.SongDetail;
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => songDetail.Comments)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => songDetail.Comments)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => songDetail.Length)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => songDetail.Length)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => songDetail.Rating)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => songDetail.Rating)
+            </dd>
+        </dl>
+        <div>
+            <button class="btn btn-info " tag="@songDetail.ID" id="editDetails" name="editDetails" type="button">Modify</button>
+        </div>
+}

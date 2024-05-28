@@ -1,0 +1,79 @@
+﻿@model MVC_Music.Models.Album
+
+@{
+    ViewData["Title"] = "Album Details";
+}
+
+<h2>Album Details</h2>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.YearProduced)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.YearProduced)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Genre)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Genre.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Songs)
+        </dt>
+        <dd class="col-sm-10">
+            <table class="table table-hover table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Songs.FirstOrDefault().Title)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Songs.FirstOrDefault().DateRecorded)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Songs.FirstOrDefault().Genre.Name)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Songs)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-controller="SongPerformances" asp-action="Index" asp-route-SongID=@item.ID>
+                                    @Html.DisplayFor(modelItem => item.Title)
+                                </a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DateRecorded)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Genre.Name)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.ID">Edit</a> |
+    <a asp-action="Index">Back to Album List</a>
+</div>

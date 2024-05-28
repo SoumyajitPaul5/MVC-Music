@@ -1,0 +1,17 @@
+{
+  "name": "MVC Music Collection",
+  "short_name": "Music",
+  "description": "In-class Project for PROG1322 - Niagara College Canada",
+  "icons": [
+    {
+      "src": "/images/mc_icon192.png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/mc_icon512.png",
+      "sizes": "512x512"
+    }
+  ],
+  "display": "standalone",
+  "start_url": "/"
+}

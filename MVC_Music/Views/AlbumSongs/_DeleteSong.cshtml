@@ -1,0 +1,14 @@
+﻿@model MVC_Music.Models.Song
+<h5>Confirm Delete</h5>
+<form asp-action="Delete" asp-controller="AlbumSongs" id="theSongForm">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="text-danger validation-summary-errors"><ul id="ErrorList"></ul></div>
+            <input type="hidden" asp-for="ID" />
+            <h6>Are you sure you want to delete - @Model.Summary?</h6>
+            <div class="form-group float-right">
+                <input type="submit" value="Delete" id="submitSongForm" class="btn btn-danger" />
+            </div>
+        </div>
+    </div>
+</form>

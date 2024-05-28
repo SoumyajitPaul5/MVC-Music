@@ -1,0 +1,35 @@
+﻿@model MVC_Music.Models.SongDetail
+
+<h5>Edit Song Detail</h5>
+<form asp-action="Edit" asp-controller="SongDetail" id="SongDetailForm">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="ID" />
+    <input type="hidden" asp-for="SongID"  />
+    <div class="row">
+        <div class="text-danger validation-summary-errors"><ul id="ErrorList"></ul></div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="Comments" class="control-label"></label>
+                <textarea asp-for="Comments" rows="3" class="form-control"></textarea>
+                <span asp-validation-for="Comments" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Length" class="control-label"></label>
+                <input asp-for="Length" class="form-control" />
+                <span asp-validation-for="Length" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rating" class="control-label"></label>
+                <select asp-for="Rating" class="form-control" asp-items="Html.GetEnumSelectList<Rating>()"></select>
+                <span asp-validation-for="Rating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-success" tag="@Model.ID" value="Save" id="submitSongDetailForm" />
+                <button class="btn btn-danger" tag="@Model.SongID" id="refreshDetails" type="button">Cancel</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+

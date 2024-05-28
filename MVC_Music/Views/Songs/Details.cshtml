@@ -1,0 +1,126 @@
+﻿@model MVC_Music.Models.Song
+
+@{
+    ViewData["Title"] = "Song Details";
+}
+
+<h2>Song Details</h2>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DateRecorded)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DateRecorded)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Album)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Album.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Genre)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Genre.Name)
+        </dd>
+    </dl>
+    <hr />
+    <div class="form-horizontal">
+        <h4>Additional Details</h4>
+        <div class="well border border-3  p-2 bg-light">
+            <div id="songDetail">
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.SongDetail.Comments)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.SongDetail.Comments)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.SongDetail.Length)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.SongDetail.Length)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.SongDetail.Rating)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.SongDetail.Rating)
+                    </dd>
+                </dl>
+                <div>
+                    <button class="btn btn-info " tag="@Model?.ID" id="editDetails" name="editDetails" type="button">Modify</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.ID">Edit</a> |
+    <a href='@ViewData["returnURL"]'>Back to Song List</a>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        $(document).on("click", "#editDetails", function () {
+            event.preventDefault();
+            var songID = $(this).attr("tag");
+            $('#songDetail').load('/SongDetail/Edit/' + songID);
+        });
+        $(document).on("click", "#refreshDetails", function () {
+            event.preventDefault();
+            var songID = $(this).attr("tag");
+            $('#songDetail').load('/Songs/ShowSongDetails/' + songID);
+        });
+        $(document).on("click", "#submitSongDetailForm", function (event) {
+            event.preventDefault();
+            var songDetailID = $(this).attr("tag");
+            var form = $('#SongDetailForm');
+            if (form.valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    success: function () {
+                        $('#songDetail').load('/Songs/ShowSongDetails/' + songDetailID);
+                    },
+                    error: function (xhr) { 
+                        var errorMessages = [];
+                        switch (xhr.status) {
+                            case 401:
+                                errorMessages.push("You must be logged in first.");
+                                break;
+                            case 403:
+                                errorMessages.push("You are not authorized for this action.");
+                                break;
+                            default:
+                                errorMessages = xhr.responseText.split("|").slice(0, -1);
+                        }
+                        if (!errorMessages.some((str) => str !== "")) {
+                            errorMessages.push("Error: Unable to complete operation");
+                        }
+                        var ul = document.getElementById("ErrorList");
+                        for (var i = 0; i < errorMessages.length; i++) {
+                            var errorMessage = errorMessages[i];
+                            var li = document.createElement("li");
+                            li.innerHTML = errorMessage;
+                            ul.appendChild(li);
+                        }
+                    }
+                });
+            }
+            return false;
+        });
+    </script>
+}
+
