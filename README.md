@@ -5,4 +5,6 @@ This MVC music collection app features user login and registration, allowing use
 
 ![Album Index Screenshot](https://github.com/SoumyajitPaul5/MVC-Music/blob/460f9dd22b797d74636fe7cf228b3d99cfd64ba9/Album%20Index.PNG)
 ![Edit Album Screenshot](https://github.com/SoumyajitPaul5/MVC-Music/blob/af410fd73899013ee194effafface0261654580b/Edit%20album.PNG)
+![Song Index Screenshot](https://github.com/SoumyajitPaul5/MVC-Music/blob/df61a2a2cfe797e4d4ae74d7d0f95591e4ebb325/Song%20Index.PNG)
+
 
